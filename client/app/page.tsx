@@ -1,5 +1,20 @@
-import Image from "next/image";
+import { HeaderComponent, FooterComponent } from "@/components/ui";
+import {
+  HomepageAbout,
+  HomepageHero,
+  HomepagePlatforms,
+} from "@/components/home";
 
 export default function Home() {
-  return <h1>Welocme to captioner</h1>;
+  return (
+    <>
+      <HeaderComponent />
+      <main>
+        <HomepageHero />
+        <HomepagePlatforms />
+        <HomepageAbout />
+      </main>
+      {/* <FooterComponent /> */}
+    </>
+  );
 }

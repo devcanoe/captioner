@@ -2,7 +2,7 @@ import * as React from "react";
 
 function HomepageAbout() {
   return (
-    <section className="bg-black rounded py-[140px]">
+    <section className="bg-black rounded md:py-[140px] py-[35px]">
       <div className="container px-4">
         <h2 className="text-3xl md:text-5xl text-white font-medium mb-10">
           Automate Growth

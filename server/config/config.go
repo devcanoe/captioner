@@ -9,7 +9,7 @@ import (
 )
 
 func EnvMongoURI() string {
-	env := os.Getenv("GO_ENV")
+	env := os.Getenv("APP_ENV")
 	fmt.Println(env)
 	if env == "DEVELOPMENT" {
 		err := godotenv.Load()

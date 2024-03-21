@@ -10,5 +10,6 @@ func WorkspaceRoute(g *gin.Engine, database *mongo.Client) {
 
 	r := g.Group("/workspaces")
 
-	r.Group("/:id").GET("/", w.GetWorkspace)
+	r.Group("/").GET("/", w.GetWorkspaces).POST("/", w.CreateWorkspace)
+	r.Group("/:id").GET("/", w.GetWorkspace).PATCH("/", w.UpdateWorkspace).DELETE("/", w.DeleteWorkspace)
 }

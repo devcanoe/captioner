@@ -9,7 +9,6 @@ import (
 
 type UserService struct {
 	client   *mongo.Client
-	User     User
 	validate *validator.Validate
 }
 

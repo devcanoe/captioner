@@ -26,13 +26,13 @@ type Workspace struct {
 }
 
 type CreateWorkspace struct {
-	Name    string             `validate:"required"`
-	OwnerID primitive.ObjectID `validate:"required, mongodb"`
+	Name    string `json:"name" validate:"required"`
+	OwnerID string `json:"owner_id" validate:"required"`
 }
 
 type UpdateWorkspace struct {
-	Name      string               `validate:"required"`
-	MemberID  []primitive.ObjectID `validate:"dive, mongodb"`
+	Name      string               `json:"name" validate:"required"`
+	MemberID  []primitive.ObjectID `json:"member_id" validate:"dive, mongodb"`
 	UpdatedAt time.Time
 }
 
@@ -97,11 +97,11 @@ func (w *WorkspaceRepository) CreateWorkspace(worksapce CreateWorkspace) (*Works
 	m := w.client
 	var newWorkspace *Workspace
 	defer cancel()
-
+	ownerID, _ := primitive.ObjectIDFromHex(worksapce.OwnerID)
 	newWorkspace = &Workspace{
 		ID:        primitive.NewObjectID(),
 		Name:      worksapce.Name,
-		OwnerID:   worksapce.OwnerID,
+		OwnerID:   ownerID,
 		MemberID:  []primitive.ObjectID{},
 		CreatedAt: time.Now().UTC(),
 		UpdatedAt: time.Now().UTC(),

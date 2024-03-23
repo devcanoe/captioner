@@ -2,6 +2,7 @@ package user
 
 import (
 	"github.com/go-playground/validator/v10"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
@@ -21,13 +22,13 @@ func NewUserService(client *mongo.Client) *UserService {
 
 func (u *UserService) GetUser(id string) (*User, error) {
 	userID, _ := primitive.ObjectIDFromHex(id)
-	user, err := NewUserRepository(u.client).GetOneUser(userID)
+	user, err := NewUserRepository(u.client).GetOneUser(bson.M{"_id": userID})
 
 	return user, err
 }
 
 func (u *UserService) GetUsers() ([]User, error) {
-	user, err := NewUserRepository(u.client).GetAllUsers()
+	user, err := NewUserRepository(u.client).GetAllUsers(bson.M{})
 
 	return user, err
 }

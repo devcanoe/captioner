@@ -3,8 +3,8 @@ package server
 import (
 	"log"
 
+	"captioner.com.ng/api/server/router"
 	handler "captioner.com.ng/internal/captioner/handler/healthcheck"
-	"captioner.com.ng/internal/captioner/router"
 	"captioner.com.ng/internal/captioner/store"
 	"github.com/gin-gonic/gin"
 )

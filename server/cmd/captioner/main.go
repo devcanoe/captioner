@@ -1,8 +1,8 @@
 package main
 
 import (
-	"captioner.com.ng/internal/captioner/server"
-	"captioner.com.ng/internal/captioner/types"
+	"captioner.com.ng/api/server"
+	"captioner.com.ng/api/types"
 	"github.com/spf13/pflag"
 )
 

@@ -15,33 +15,6 @@ const (
 	COLLECTION = "sessions"
 )
 
-type Session struct {
-	ID           primitive.ObjectID `json:"id" bson:"_id"`
-	UserID       primitive.ObjectID `json:"user_id" bson:"user_id"`
-	RefreshToken string             `json:"refresh_token" bson:"refresh_token"`
-	SessionToken string             `json:"session_token" bson:"session_token"`
-	ExpiresAt    time.Time          `json:"expires_at" bson:"expires_at"`
-	IsActive     bool               `json:"is_active" bson:"is_active"`
-	IP           string             `json:"ip" bson:"ip"`
-	Device       string             `json:"device" bson:"device"`
-	CreatedAt    time.Time          `json:"created_at" bson:"created_at"`
-	UpdatedAt    time.Time          `json:"updated_at" bson:"updated_at"`
-}
-
-type CreateSession struct {
-	UserID       string `json:"user_id" verified:"required"`
-	RefreshToken string `verified:"required"`
-	SessionToken string `verified:"required"`
-	IP           string `verified:"required"`
-	Device       string `verified:"required"`
-}
-
-type UpdateSession struct {
-	SessionToken string `verified:"required"`
-	IsActive     bool
-	UpdatedAt    time.Time
-}
-
 type SessionRepository struct {
 	client  *mongo.Collection
 	Session Session
@@ -100,11 +73,10 @@ func (s *SessionRepository) CreateOneSession(params CreateSession) (*Session, er
 	m := s.client
 	var newSession Session
 	defer cancel()
-	userId, _ := primitive.ObjectIDFromHex(params.UserID)
 
 	newSession = Session{
 		ID:           primitive.NewObjectID(),
-		UserID:       userId,
+		UserID:       params.UserID,
 		RefreshToken: params.RefreshToken,
 		SessionToken: params.SessionToken,
 		IsActive:     true,

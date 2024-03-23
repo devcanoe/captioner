@@ -19,25 +19,6 @@ const (
 	COLLECTION = "users"
 )
 
-type User struct {
-	ID        primitive.ObjectID `json:"id" bson:"_id"`
-	Email     string             `json:"email,omitempty" bson:"email"`
-	Password  string             `json:"password,omitempty" bson:"password"`
-	Username  string             `json:"username,omitempty" bson:"username"`
-	CreatedAt time.Time          `json:"created_at,omitempty" bson:"created_at"`
-	UpdatedAt time.Time          `json:"updated_at,omitempty" bson:"updated_at"`
-}
-
-type CreateUser struct {
-	Email    string `validate:"email,required"`
-	Password string `validate:"required"`
-}
-
-type UpdateUser struct {
-	Password  string `validate:"required"`
-	UpdatedAt time.Time
-}
-
 type IUser interface {
 	GetOneUser(id primitive.ObjectID) (*User, error)
 	GetAllUsers() (*[]User, error)
@@ -57,13 +38,13 @@ func NewUserRepository(client *mongo.Client) *UserRepository {
 	}
 }
 
-func (u *UserRepository) GetOneUser(id primitive.ObjectID) (*User, error) {
+func (u *UserRepository) GetOneUser(filter bson.M) (*User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	m := u.client
 	var user *User
 	defer cancel()
 
-	err := m.FindOne(ctx, bson.M{"_id": id}).Decode(&user)
+	err := m.FindOne(ctx, filter).Decode(&user)
 	if err != nil {
 		return nil, err
 	}
@@ -71,14 +52,14 @@ func (u *UserRepository) GetOneUser(id primitive.ObjectID) (*User, error) {
 
 }
 
-func (u *UserRepository) GetAllUsers() ([]User, error) {
+func (u *UserRepository) GetAllUsers(filter bson.M) ([]User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	m := u.client
 	var users []User
 
 	defer cancel()
 
-	result, err := m.Find(ctx, bson.M{})
+	result, err := m.Find(ctx, filter)
 	if err != nil {
 		return users, err
 	}

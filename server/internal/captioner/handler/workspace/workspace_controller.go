@@ -3,7 +3,7 @@ package workspace
 import (
 	"net/http"
 
-	response "captioner.com.ng/internal/captioner/http"
+	"captioner.com.ng/api/types"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -23,18 +23,18 @@ func (w *WorkspaceController) GetWorkspace(c *gin.Context) {
 	workspace, err := NewWorkspaceService(w.client).GetOne(id)
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, response.HttpResponse[string]{Status: response.ERROR, StatusCode: http.StatusInternalServerError, Message: err.Error(), Data: ""})
+		c.JSON(http.StatusInternalServerError, types.HttpResponse[string]{Status: types.ERROR, StatusCode: http.StatusInternalServerError, Message: err.Error(), Data: ""})
 	}
-	c.JSON(http.StatusOK, response.HttpResponse[Workspace]{Status: response.SUCCESS, StatusCode: http.StatusOK, Message: "Workspace Successfully Retrieved!", Data: *workspace})
+	c.JSON(http.StatusOK, types.HttpResponse[Workspace]{Status: types.SUCCESS, StatusCode: http.StatusOK, Message: "Workspace Successfully Retrieved!", Data: *workspace})
 }
 
 func (w *WorkspaceController) GetWorkspaces(c *gin.Context) {
 	workspaces, err := NewWorkspaceService(w.client).GetAll()
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, response.HttpResponse[string]{Status: response.ERROR, StatusCode: http.StatusInternalServerError, Message: err.Error(), Data: ""})
+		c.JSON(http.StatusInternalServerError, types.HttpResponse[string]{Status: types.ERROR, StatusCode: http.StatusInternalServerError, Message: err.Error(), Data: ""})
 	}
-	c.JSON(http.StatusOK, response.HttpResponse[[]Workspace]{Status: response.SUCCESS, StatusCode: http.StatusOK, Message: "Workspace Successfully Retrieved!", Data: *workspaces})
+	c.JSON(http.StatusOK, types.HttpResponse[[]Workspace]{Status: types.SUCCESS, StatusCode: http.StatusOK, Message: "Workspace Successfully Retrieved!", Data: *workspaces})
 }
 
 func (w *WorkspaceController) CreateWorkspace(c *gin.Context) {
@@ -44,9 +44,9 @@ func (w *WorkspaceController) CreateWorkspace(c *gin.Context) {
 	workspace, err := NewWorkspaceService(w.client).CreateOne(body)
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, response.HttpResponse[string]{Status: response.ERROR, StatusCode: http.StatusInternalServerError, Message: err.Error(), Data: ""})
+		c.JSON(http.StatusInternalServerError, types.HttpResponse[string]{Status: types.ERROR, StatusCode: http.StatusInternalServerError, Message: err.Error(), Data: ""})
 	}
-	c.JSON(http.StatusOK, response.HttpResponse[Workspace]{Status: response.SUCCESS, StatusCode: http.StatusOK, Message: "Workspace Successfully Retrieved!", Data: *workspace})
+	c.JSON(http.StatusOK, types.HttpResponse[Workspace]{Status: types.SUCCESS, StatusCode: http.StatusOK, Message: "Workspace Successfully Retrieved!", Data: *workspace})
 }
 
 func (w *WorkspaceController) UpdateWorkspace(c *gin.Context) {
@@ -55,9 +55,9 @@ func (w *WorkspaceController) UpdateWorkspace(c *gin.Context) {
 	c.ShouldBindJSON(&body)
 	workspace, err := NewWorkspaceService(w.client).UpdateOne(id, body)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, response.HttpResponse[string]{Status: response.ERROR, StatusCode: http.StatusInternalServerError, Message: err.Error(), Data: ""})
+		c.JSON(http.StatusInternalServerError, types.HttpResponse[string]{Status: types.ERROR, StatusCode: http.StatusInternalServerError, Message: err.Error(), Data: ""})
 	}
-	c.JSON(http.StatusOK, response.HttpResponse[Workspace]{Status: response.SUCCESS, StatusCode: http.StatusOK, Message: "Workspace Successfully Retrieved!", Data: *workspace})
+	c.JSON(http.StatusOK, types.HttpResponse[Workspace]{Status: types.SUCCESS, StatusCode: http.StatusOK, Message: "Workspace Successfully Retrieved!", Data: *workspace})
 }
 
 func (w *WorkspaceController) DeleteWorkspace(c *gin.Context) {
@@ -66,7 +66,7 @@ func (w *WorkspaceController) DeleteWorkspace(c *gin.Context) {
 	err := NewWorkspaceService(w.client).DeleteOne(id)
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, response.HttpResponse[string]{Status: response.ERROR, StatusCode: http.StatusInternalServerError, Message: err.Error(), Data: ""})
+		c.JSON(http.StatusInternalServerError, types.HttpResponse[string]{Status: types.ERROR, StatusCode: http.StatusInternalServerError, Message: err.Error(), Data: ""})
 	}
-	c.JSON(http.StatusNoContent, response.HttpResponse[string]{Status: response.SUCCESS, StatusCode: http.StatusNoContent, Message: "Workspace Successfully Retrieved!", Data: ""})
+	c.JSON(http.StatusNoContent, types.HttpResponse[string]{Status: types.SUCCESS, StatusCode: http.StatusNoContent, Message: "Workspace Successfully Retrieved!", Data: ""})
 }

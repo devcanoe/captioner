@@ -3,7 +3,7 @@ package user
 import (
 	"net/http"
 
-	response "captioner.com.ng/internal/captioner/http"
+	"captioner.com.ng/api/types"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -23,19 +23,19 @@ func (u *UserController) GetUser(c *gin.Context) {
 	user, err := NewUserService(u.client).GetUser(id)
 
 	if err != nil {
-		c.JSON(http.StatusNotFound, response.HttpResponse[string]{Status: response.ERROR, StatusCode: http.StatusNotFound, Message: "User Not Found!", Data: ""})
+		c.JSON(http.StatusNotFound, types.HttpResponse[string]{Status: types.ERROR, StatusCode: http.StatusNotFound, Message: "User Not Found!", Data: ""})
 		return
 	}
-	c.JSON(http.StatusOK, response.HttpResponse[User]{Status: response.SUCCESS, StatusCode: http.StatusOK, Message: "User Successfully Retrieved!", Data: *user})
+	c.JSON(http.StatusOK, types.HttpResponse[User]{Status: types.SUCCESS, StatusCode: http.StatusOK, Message: "User Successfully Retrieved!", Data: *user})
 }
 
 func (u *UserController) GetUsers(c *gin.Context) {
 	users, err := NewUserService(u.client).GetUsers()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, response.HttpResponse[string]{Status: response.ERROR, StatusCode: http.StatusInternalServerError, Message: "Could't get Users", Data: ""})
+		c.JSON(http.StatusInternalServerError, types.HttpResponse[string]{Status: types.ERROR, StatusCode: http.StatusInternalServerError, Message: "Could't get Users", Data: ""})
 		return
 	}
-	c.JSON(http.StatusOK, response.HttpResponse[[]User]{Status: response.SUCCESS, StatusCode: http.StatusOK, Message: "Users Successfully Retrieved", Data: users})
+	c.JSON(http.StatusOK, types.HttpResponse[[]User]{Status: types.SUCCESS, StatusCode: http.StatusOK, Message: "Users Successfully Retrieved", Data: users})
 
 }
 
@@ -45,10 +45,10 @@ func (u *UserController) CreateUser(c *gin.Context) {
 
 	user, err := NewUserService(u.client).CreateUser(userBody)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, response.HttpResponse[string]{Status: response.ERROR, StatusCode: http.StatusInternalServerError, Message: err.Error(), Data: ""})
+		c.JSON(http.StatusInternalServerError, types.HttpResponse[string]{Status: types.ERROR, StatusCode: http.StatusInternalServerError, Message: err.Error(), Data: ""})
 		return
 	}
-	c.JSON(http.StatusOK, response.HttpResponse[User]{Status: response.SUCCESS, StatusCode: http.StatusOK, Message: "User Successfully Created", Data: *user})
+	c.JSON(http.StatusOK, types.HttpResponse[User]{Status: types.SUCCESS, StatusCode: http.StatusOK, Message: "User Successfully Created", Data: *user})
 }
 
 func (u *UserController) UpdateUser(c *gin.Context) {
@@ -58,10 +58,10 @@ func (u *UserController) UpdateUser(c *gin.Context) {
 
 	user, err := NewUserService(u.client).UpdateUser(id, userBody)
 	if err != nil {
-		c.JSON(http.StatusNotFound, response.HttpResponse[string]{Status: response.ERROR, StatusCode: http.StatusNotFound, Message: err.Error(), Data: ""})
+		c.JSON(http.StatusNotFound, types.HttpResponse[string]{Status: types.ERROR, StatusCode: http.StatusNotFound, Message: err.Error(), Data: ""})
 		return
 	}
-	c.JSON(http.StatusAccepted, response.HttpResponse[User]{Status: response.SUCCESS, StatusCode: http.StatusAccepted, Message: "User Successfully Updated", Data: *user})
+	c.JSON(http.StatusAccepted, types.HttpResponse[User]{Status: types.SUCCESS, StatusCode: http.StatusAccepted, Message: "User Successfully Updated", Data: *user})
 }
 
 func (u *UserController) DeleteUser(c *gin.Context) {
@@ -70,8 +70,8 @@ func (u *UserController) DeleteUser(c *gin.Context) {
 	err := NewUserService(u.client).DeleteUser(id)
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, response.HttpResponse[string]{Status: response.ERROR, StatusCode: http.StatusInternalServerError, Message: err.Error(), Data: ""})
+		c.JSON(http.StatusInternalServerError, types.HttpResponse[string]{Status: types.ERROR, StatusCode: http.StatusInternalServerError, Message: err.Error(), Data: ""})
 		return
 	}
-	c.JSON(http.StatusNoContent, response.HttpResponse[string]{Status: response.SUCCESS, StatusCode: http.StatusNoContent, Message: "Users Successfully Created", Data: ""})
+	c.JSON(http.StatusNoContent, types.HttpResponse[string]{Status: types.SUCCESS, StatusCode: http.StatusNoContent, Message: "Users Successfully Created", Data: ""})
 }

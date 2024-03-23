@@ -3,7 +3,7 @@ package session
 import (
 	"net/http"
 
-	response "captioner.com.ng/internal/captioner/http"
+	"captioner.com.ng/api/types"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -23,10 +23,10 @@ func (s *SessionController) GetAll(c *gin.Context) {
 	sessions, err := s.service.GetSessions()
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, response.HttpResponse[string]{Status: response.ERROR, StatusCode: http.StatusInternalServerError, Message: "Could't get Users", Data: ""})
+		c.JSON(http.StatusInternalServerError, types.HttpResponse[string]{Status: types.ERROR, StatusCode: http.StatusInternalServerError, Message: "Could't get Users", Data: ""})
 		return
 	}
-	c.JSON(http.StatusOK, response.HttpResponse[[]Session]{Status: response.SUCCESS, StatusCode: http.StatusOK, Message: "Users Successfully Retrieved", Data: *sessions})
+	c.JSON(http.StatusOK, types.HttpResponse[[]Session]{Status: types.SUCCESS, StatusCode: http.StatusOK, Message: "Users Successfully Retrieved", Data: *sessions})
 
 }
 
@@ -35,10 +35,10 @@ func (s *SessionController) GetOne(c *gin.Context) {
 
 	session, err := s.service.GetSession(id)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, response.HttpResponse[string]{Status: response.ERROR, StatusCode: http.StatusInternalServerError, Message: "Could't get Users", Data: ""})
+		c.JSON(http.StatusInternalServerError, types.HttpResponse[string]{Status: types.ERROR, StatusCode: http.StatusInternalServerError, Message: "Could't get Users", Data: ""})
 		return
 	}
-	c.JSON(http.StatusOK, response.HttpResponse[Session]{Status: response.SUCCESS, StatusCode: http.StatusOK, Message: "Users Successfully Retrieved", Data: *session})
+	c.JSON(http.StatusOK, types.HttpResponse[Session]{Status: types.SUCCESS, StatusCode: http.StatusOK, Message: "Users Successfully Retrieved", Data: *session})
 
 }
 
@@ -48,14 +48,13 @@ func (s *SessionController) CreateOne(c *gin.Context) {
 
 	body.Device = c.GetHeader("user-agent")
 	body.IP = c.ClientIP()
-
 	session, err := s.service.CreateSession(body)
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, response.HttpResponse[string]{Status: response.ERROR, StatusCode: http.StatusInternalServerError, Message: "Could't get Users", Data: ""})
+		c.JSON(http.StatusInternalServerError, types.HttpResponse[string]{Status: types.ERROR, StatusCode: http.StatusInternalServerError, Message: "Could't get Users", Data: ""})
 		return
 	}
-	c.JSON(http.StatusOK, response.HttpResponse[Session]{Status: response.SUCCESS, StatusCode: http.StatusOK, Message: "Users Successfully Retrieved", Data: *session})
+	c.JSON(http.StatusOK, types.HttpResponse[Session]{Status: types.SUCCESS, StatusCode: http.StatusOK, Message: "Users Successfully Retrieved", Data: *session})
 
 }
 
@@ -66,10 +65,10 @@ func (s *SessionController) UpdateOne(c *gin.Context) {
 
 	session, err := s.service.UpdateSession(id, body)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, response.HttpResponse[string]{Status: response.ERROR, StatusCode: http.StatusInternalServerError, Message: "Could't get Users", Data: ""})
+		c.JSON(http.StatusInternalServerError, types.HttpResponse[string]{Status: types.ERROR, StatusCode: http.StatusInternalServerError, Message: "Could't get Users", Data: ""})
 		return
 	}
-	c.JSON(http.StatusOK, response.HttpResponse[Session]{Status: response.SUCCESS, StatusCode: http.StatusOK, Message: "Users Successfully Retrieved", Data: *session})
+	c.JSON(http.StatusOK, types.HttpResponse[Session]{Status: types.SUCCESS, StatusCode: http.StatusOK, Message: "Users Successfully Retrieved", Data: *session})
 }
 
 func (s *SessionController) DeleteOne(c *gin.Context) {
@@ -77,7 +76,7 @@ func (s *SessionController) DeleteOne(c *gin.Context) {
 
 	err := s.service.DeleteSession(id)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, response.HttpResponse[string]{Status: response.ERROR, StatusCode: http.StatusInternalServerError, Message: "Could't get Users", Data: ""})
+		c.JSON(http.StatusInternalServerError, types.HttpResponse[string]{Status: types.ERROR, StatusCode: http.StatusInternalServerError, Message: "Could't get Users", Data: ""})
 		return
 	}
 	c.JSON(http.StatusNoContent, "")

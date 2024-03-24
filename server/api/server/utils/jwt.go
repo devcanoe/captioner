@@ -8,16 +8,12 @@ import (
 	"time"
 
 	"captioner.com.ng/config"
-	"github.com/lestrrat-go/jwx/jwa"
-	"github.com/lestrrat-go/jwx/jwt"
+	"github.com/lestrrat-go/jwx/v2/jwa"
+	"github.com/lestrrat-go/jwx/v2/jwt"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type JWTPayload struct {
-	UserID primitive.ObjectID
-	Type   string
-}
-type JWTClaims struct {
 	UserID primitive.ObjectID
 	Type   string
 }
@@ -32,11 +28,11 @@ func CreateToken(payload JWTPayload, expire time.Time) (string, error) {
 
 	privateKey, _ := x509.ParsePKCS1PrivateKey(block.Bytes)
 
-	tok, err := jwt.NewBuilder().Claim("user_id", payload.UserID).Claim("type", payload.Type).Issuer(`api.captioner.com.ng`).IssuedAt(time.Now()).Expiration(time.Now().Add(365 * 24 * 24 * time.Hour)).Build()
+	tok, err := jwt.NewBuilder().Claim("user_id", payload.UserID).Claim("type", payload.Type).Issuer(`api.captioner.com.ng`).IssuedAt(time.Now()).Expiration(expire).Build()
 	if err != nil {
 		return "", err
 	}
-	signed, err := jwt.Sign(tok, jwa.RS256, privateKey)
+	signed, err := jwt.Sign(tok, jwt.WithKey(jwa.RS256, privateKey))
 	if err != nil {
 		return "", err
 	}
@@ -52,9 +48,13 @@ func VerifyToken(token string) (jwt.Token, error) {
 
 	block, _ := pem.Decode(key)
 
-	publicKey, _ := x509.ParsePKCS1PublicKey(block.Bytes)
+	publicKey, err := x509.ParsePKIXPublicKey(block.Bytes)
+	if err != nil {
+		fmt.Println("Couldn't Load Pubkey")
+		return nil, err
+	}
 
-	verifiedToken, err := jwt.Parse([]byte(token), jwt.WithVerify(jwa.RS256, publicKey))
+	verifiedToken, err := jwt.Parse([]byte(token), jwt.WithKey(jwa.RS256, publicKey))
 	if err != nil {
 		fmt.Println("Couldn't verify token")
 		return nil, err

@@ -9,9 +9,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Start(addr *string) {
+func Start(addr *string, uri *string) {
 	g := gin.Default()
-	db := store.ConnectDB()
+	db := store.ConnectDB(uri)
 	g.Use(func(ctx *gin.Context) {
 		ctx.Header("Access-Control-Allow-Methods", "HEAD, OPTIONS, GET, POST,PATCH,DELETE")
 		ctx.Header("Access-Control-Allow-Origin", "*")

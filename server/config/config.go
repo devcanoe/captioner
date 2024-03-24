@@ -7,18 +7,13 @@ import (
 	"github.com/joho/godotenv"
 )
 
-var env string = os.Getenv("APP_ENV")
-
-func EnvMongoURI() string {
-	if env == "DEVELOPMENT" {
-		err := godotenv.Load()
-		if err != nil {
-			log.Fatal("Error loading .env file")
-		}
-	}
-
-	return os.Getenv("MONGOURI")
+type Config struct {
+	Addr     string
+	MongoURI string
+	Version  float32
 }
+
+var env string = os.Getenv("APP_ENV")
 
 func EnvPrivateKey() string {
 	if env == "DEVELOPMENT" {

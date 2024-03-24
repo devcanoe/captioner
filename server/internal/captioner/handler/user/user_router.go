@@ -13,7 +13,6 @@ func UserRoute(g *gin.Engine, database *mongo.Client) {
 	r := g.Group("/users")
 
 	r.Group("/").GET("/", u.GetUsers).POST("/", u.CreateUser)
-	r.Use(middleware.IsAuthenticated())
-	r.Group("/:id").GET("/", u.GetUser).PATCH("/", u.UpdateUser).DELETE("/", u.DeleteUser)
+	r.Group("/:id", middleware.IsAuthenticated()).GET("/", u.GetUser).PATCH("/", u.UpdateUser).DELETE("/", u.DeleteUser)
 
 }

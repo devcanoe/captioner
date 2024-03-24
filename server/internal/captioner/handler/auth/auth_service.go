@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"captioner.com.ng/api/server/utils"
+	"captioner.com.ng/api/types"
 	"captioner.com.ng/internal/captioner/handler/session"
 	"captioner.com.ng/internal/captioner/handler/user"
 	"go.mongodb.org/mongo-driver/bson"
@@ -58,12 +59,12 @@ func (a *AuthService) Login(params Signin) (*user.User, *session.Session, error)
 		Type:   REFRESH_TOKEN,
 	}
 
-	refresh_token, err := utils.CreateToken(payload, time.Now().Add(REFRESH_EXPIRE_TIME*time.Second))
+	refresh_token, err := utils.CreateToken(payload, time.Now().Add(types.REFRESH_TOKEN_EXPIRE*time.Second))
 	if err != nil {
 		return nil, nil, err
 	}
 	payload.Type = SESSION_TOKEN
-	session_token, err := utils.CreateToken(payload, time.Now().Add(SESSION_EXPIRE_TIME*time.Second))
+	session_token, err := utils.CreateToken(payload, time.Now().Add(types.SESSION_TOKEN_EXPIRE*time.Second))
 	if err != nil {
 		return nil, nil, err
 	}

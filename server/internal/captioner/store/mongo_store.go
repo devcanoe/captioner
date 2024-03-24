@@ -6,7 +6,6 @@ import (
 	"log"
 	"time"
 
-	"captioner.com.ng/config"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -28,10 +27,9 @@ func createIndex(db *mongo.Client) {
 
 }
 
-func ConnectDB() *mongo.Client {
+func ConnectDB(uri *string) *mongo.Client {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(config.EnvMongoURI()))
-	fmt.Println(config.EnvMongoURI())
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(*uri))
 	if err != nil {
 		log.Fatal("Could not connect to Database", err)
 	}

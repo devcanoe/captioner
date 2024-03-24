@@ -12,8 +12,3 @@ type Signup struct {
 	Password string `json:"password" bson:"password"`
 }
 type Token string
-
-const (
-	REFRESH_EXPIRE_TIME = 365 * 24 * 60 * 60
-	SESSION_EXPIRE_TIME = 2 * 24 * 60 * 60
-)

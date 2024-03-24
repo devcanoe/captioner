@@ -41,7 +41,7 @@ func (a *AuthController) Login(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, types.HttpResponse[string]{Status: types.ERROR, StatusCode: http.StatusInternalServerError, Message: err.Error(), Data: ""})
 		return
 	}
-	c.SetCookie("x-refresh", sessions.RefreshToken, REFRESH_EXPIRE_TIME, "*", "*", true, true)
-	c.SetCookie("x-session", sessions.SessionToken, SESSION_EXPIRE_TIME, "*", "*", true, true)
+	c.SetCookie("x-refresh", sessions.RefreshToken, types.REFRESH_TOKEN_EXPIRE, "*", "*", true, true)
+	c.SetCookie("x-session", sessions.SessionToken, types.SESSION_TOKEN_EXPIRE, "*", "*", true, true)
 	c.JSON(http.StatusOK, types.HttpResponse[user.User]{Status: types.SUCCESS, StatusCode: http.StatusOK, Message: "Users Successfully Retrieved", Data: *users})
 }

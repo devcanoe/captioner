@@ -1,1 +1,7 @@
 .env
+
+./config/config.yml
+
+/config/config.yml
+
+vendor

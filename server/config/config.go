@@ -1,38 +1,39 @@
 package config
 
 import (
-	"log"
-	"os"
-
-	"github.com/joho/godotenv"
+	"github.com/ilyakaznacheev/cleanenv"
 )
 
 type Config struct {
-	Addr     string
-	MongoURI string
-	Version  float32
+	HTTP  `yaml:"http"`
+	MONGO `yaml:"mongo"`
+	HASH  `yaml:"hash"`
 }
 
-var env string = os.Getenv("APP_ENV")
-
-func EnvPrivateKey() string {
-	if env == "DEVELOPMENT" {
-		err := godotenv.Load()
-		if err != nil {
-			log.Fatal("Error loading .env file")
-		}
-	}
-
-	return os.Getenv("JWT_PRIVATE_KEY")
+type HTTP struct {
+	Port string `env-required:"true" yaml:"port" env:"HTTP_PORT"`
 }
 
-func EnvPublicKey() string {
-	if env == "DEVELOPMENT" {
-		err := godotenv.Load()
-		if err != nil {
-			log.Fatal("Error loading .env file")
-		}
+type HASH struct {
+	PrivateKey string `env-required:"true" env:"JWT_PRIVATE_KEY" yaml:"private"`
+	PublicKey  string `env-required:"true" env:"JWT_PUBLIC_KEY" yaml:"public"`
+}
+
+type MONGO struct {
+	Uri      string `env-required:"true" yaml:"uri" env:"DATABASE_URL"`
+	Database string `env-required:"true" yaml:"database" env:"DATABASE_NAME"`
+}
+
+func NewConfig() (*Config, error) {
+	cfg := &Config{}
+	err := cleanenv.ReadConfig("./config/config.yml", cfg)
+	if err != nil {
+		return nil, err
 	}
 
-	return os.Getenv("JWT_PUBLIC_KEY")
+	err = cleanenv.ReadEnv(cfg)
+	if err != nil {
+		return nil, err
+	}
+	return cfg, nil
 }
